@@ -1,0 +1,6 @@
+Library/
+Logs/
+Temp/
+.vsconfig
+Assembly-CSharp.csproj
+Unity_Network2D.sln
