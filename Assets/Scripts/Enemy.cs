@@ -4,13 +4,16 @@ using UnityEngine.UI;
 
 public class Enemy : NetworkBehaviour
 {
+    [SerializeField]
+    Vector3 _hpBarOffset;
+
     private BoxCollider2D _collider;
     private Rigidbody2D _rigidbody;
     private NetworkObject _networkObject;
 
     private Image _hpBarImage;
     private GameObject _hpBar;
-    private Transform _hpBarPanel;
+    private Transform _hpBarPanel;    
 
     private float _moveTime = 0.0f;
     private int _curHp = 5;
@@ -42,12 +45,13 @@ public class Enemy : NetworkBehaviour
             {
                 //_networkObject.Despawn();
                 //gameObject.SetActive(false);
-                PushServerRpc();                
+                PushServerRpc(_networkObject.OwnerClientId);                
             }
         }
 
         CheckMoveTime();
-        _hpBar.transform.localPosition = Camera.main.WorldToScreenPoint(transform.position);
+        _hpBar.transform.localPosition = 
+            Camera.main.WorldToScreenPoint(transform.position + _hpBarOffset);
     }
 
     private void CheckMoveTime()
@@ -66,7 +70,7 @@ public class Enemy : NetworkBehaviour
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void PushServerRpc()
+    private void PushServerRpc(ulong clientId)
     {
         //_networkObject.Despawn();
 
@@ -79,23 +83,25 @@ public class Enemy : NetworkBehaviour
         _rigidbody.AddForce(dir.normalized * power);
         _moveTime = Random.Range(0.5f, 1.0f);        
         
-        OnDamageClientRpc();
+        OnDamageClientRpc(clientId);
     }
 
     [ClientRpc]
-    private void OnDamageClientRpc()
+    private void OnDamageClientRpc(ulong clientId)
     {
-        _curHp--;
+        _curHp--;        
 
         _hpBarImage.fillAmount = (float)_curHp / _maxHp;
 
         if(_curHp <= 0)
         {
-            if(IsServer)
+            Destroy(_hpBar);
+            GameManager.Instance.IncreaseScore(clientId);
+
+            if (IsServer)
             {
-                _networkObject.Despawn();
-                Destroy(_hpBar);
-            }
+                _networkObject.Despawn();                
+            }            
         }
     }
 }

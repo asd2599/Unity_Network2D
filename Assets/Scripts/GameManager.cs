@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class GameManager : NetworkBehaviour
 {
@@ -13,8 +14,14 @@ public class GameManager : NetworkBehaviour
     private Button _startBtn;
     [SerializeField]
     private GameObject _errorPanel;
+    [SerializeField]
+    private Transform _scorePanel;
 
     private bool _isConnectLocked = false;
+    private int _playerNum = 0;
+
+    private Dictionary<ulong, int> _playerScores = new Dictionary<ulong, int>();
+    private List<TextMeshProUGUI> _playerScoreTexts = new List<TextMeshProUGUI>();
 
     private void Awake()
     {
@@ -64,7 +71,7 @@ public class GameManager : NetworkBehaviour
     {
         _isConnectLocked = true;
 
-        OnStartClientRpc();
+        OnStartClientRpc();        
     }
 
     [ClientRpc]
@@ -73,5 +80,45 @@ public class GameManager : NetworkBehaviour
         _startBtn.gameObject.SetActive(false);
 
         EnemyManager.Instance.StartGame();
+
+        CreateScore();
+    }
+
+    private void CreateScore()
+    {
+        _playerNum = NetworkManager.Singleton.ConnectedClientsList.Count;        
+
+        GameObject prefab = Resources.Load<GameObject>("Prefabs/Score");
+
+        for(int i = 0; i < _playerNum; i++)
+        {
+            GameObject score = Instantiate(prefab, _scorePanel);
+            TextMeshProUGUI text = score.GetComponent<TextMeshProUGUI>();
+            _playerScoreTexts.Add(text);
+
+            NetworkClient client = NetworkManager.Singleton.ConnectedClientsList[i];
+            _playerScores.Add(client.ClientId, 0);
+            //text.text = "Player" + i + " : " + _playerScores[i];
+        }
+
+        UpdateScore();
+    }
+
+    public void UpdateScore()
+    {
+        int count = 0;
+        foreach(KeyValuePair<ulong, int> playerScore in _playerScores)
+        {
+            TextMeshProUGUI text = _playerScoreTexts[count];
+            text.text = "Player" + count + " : " + playerScore.Value;
+            count++;
+        }
+    }
+
+    public void IncreaseScore(ulong clientId)
+    {
+        _playerScores[clientId]++;
+
+        UpdateScore();
     }
 }
