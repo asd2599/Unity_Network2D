@@ -32,7 +32,7 @@ public class EnemyManager : NetworkBehaviour
             GameObject obj = Instantiate(_enemyPrefab, pos, Quaternion.identity);
             obj.GetComponent<NetworkObject>().Spawn();
 
-            yield return new WaitForSeconds(1.0f);
+            yield return new WaitForSeconds(5.0f);
         }
     }
 

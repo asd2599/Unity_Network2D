@@ -28,7 +28,6 @@ public class GameManager : NetworkBehaviour
     {
         NetworkManager.Singleton.OnClientConnectedCallback += OnConnected;
         NetworkManager.Singleton.OnClientDisconnectCallback += OnDisconnected;
-        //NetworkManager.Singleton.ConnectionApprovalCallback = ApprovalCheck;
     }
 
     private void OnDisconnected(ulong clientId)
@@ -38,26 +37,6 @@ public class GameManager : NetworkBehaviour
         if(NetworkManager.Singleton.LocalClientId == clientId)
         {
             _errorPanel.SetActive(true);
-        }
-    }
-
-    private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request,
-        NetworkManager.ConnectionApprovalResponse response)
-    {
-        print("ApprovalCheck");
-
-        if(_isConnectLocked)
-        {
-            print("새로운 클라이언트 접속 거부!");
-            response.Approved = false;
-            response.Reason = "Arreay GameStart!";
-            _errorPanel.SetActive(true);
-        }
-        else
-        {
-            print("새로운 클라이언트 접속 허용!");
-            response.Approved = true;
-            response.CreatePlayerObject = true;
         }
     }
 
@@ -94,12 +73,5 @@ public class GameManager : NetworkBehaviour
         _startBtn.gameObject.SetActive(false);
 
         EnemyManager.Instance.StartGame();
-    }
-
-
-
-    public void SetHp(int hp)
-    {
-        //_testText.text = hp.ToString();
     }
 }
