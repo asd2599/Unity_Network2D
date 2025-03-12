@@ -4,8 +4,12 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
+public delegate void OnNetworkAtion(ulong clientId);
+
 public class GameManager : NetworkBehaviour
 {
+    
+
     static public GameManager Instance;
 
     [SerializeField]

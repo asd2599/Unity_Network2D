@@ -7,23 +7,26 @@ public class EnemyManager : NetworkBehaviour
     static public EnemyManager Instance;
 
     private GameObject _enemyPrefab;
+    private GameObject _itemPrefab;
 
     private void Awake()
     {
         Instance = this;
 
         _enemyPrefab = Resources.Load<GameObject>("Prefabs/Enemy");
+        _itemPrefab = Resources.Load<GameObject>("Prefabs/Item");
     }
 
     public void StartGame()
     {
         if(IsServer)
         {
-            StartCoroutine(SpawnLoop());
+            StartCoroutine(SpawnEnemy());
+            StartCoroutine(SpawnItem());
         }        
     }
     
-    private IEnumerator SpawnLoop()
+    private IEnumerator SpawnEnemy()
     {
         while(true)
         {
@@ -32,7 +35,22 @@ public class EnemyManager : NetworkBehaviour
             GameObject obj = Instantiate(_enemyPrefab, pos, Quaternion.identity);
             obj.GetComponent<NetworkObject>().Spawn();
 
-            yield return new WaitForSeconds(5.0f);
+            yield return new WaitForSeconds(1.0f);
+        }
+    }
+
+    private IEnumerator SpawnItem()
+    {
+        while (true)
+        {
+            Vector3 pos = GetRandomPositionInView();
+
+            GameObject obj = Instantiate(_itemPrefab, pos, Quaternion.identity);
+            obj.GetComponent<NetworkObject>().Spawn();
+
+            float nextSpawnInterval = Random.Range(1.0f, 5.0f);
+
+            yield return new WaitForSeconds(nextSpawnInterval);
         }
     }
 
