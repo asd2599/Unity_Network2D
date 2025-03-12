@@ -36,9 +36,9 @@ public class Item : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void OnClickItemServerRpc(ulong clientId)
     {
-        _networkObject.Despawn();
-
         OnClickItemClientRpc(clientId);
+
+        _networkObject.Despawn();        
     }
 
 
