@@ -20,6 +20,8 @@ public class GameManager : NetworkBehaviour
     private GameObject _errorPanel;
     [SerializeField]
     private Transform _scorePanel;
+    [SerializeField]
+    private GameObject _endPanel;
 
     private bool _isConnectLocked = false;
     private int _playerNum = 0;
@@ -124,5 +126,26 @@ public class GameManager : NetworkBehaviour
         _playerScores[clientId]++;
 
         UpdateScore();
+
+        if (IsServer && _playerScores[clientId] == 5)
+        {
+            OnEndClientRpc(clientId);
+        }
+    }
+
+    [ClientRpc]
+    private void OnEndClientRpc(ulong clientId)
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach(GameObject player in players)
+        {
+            player.SetActive(false);
+        }
+
+        _endPanel.SetActive(true);
+
+        TextMeshProUGUI text = _endPanel.GetComponentInChildren<TextMeshProUGUI>();
+        text.text = "Player" + clientId + " Win!";
     }
 }

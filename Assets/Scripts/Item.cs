@@ -45,11 +45,6 @@ public class Item : NetworkBehaviour
     [ClientRpc]
     private void OnClickItemClientRpc(ulong clientId)
     {
-        if(IsServer)
-        {
-            _networkObject.Despawn();
-        }
-
         Cursor.OnClickItemCallback(clientId);
     }
 }
