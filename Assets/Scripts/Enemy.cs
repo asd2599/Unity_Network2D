@@ -45,7 +45,7 @@ public class Enemy : NetworkBehaviour
             {
                 //_networkObject.Despawn();
                 //gameObject.SetActive(false);
-                PushServerRpc(_networkObject.OwnerClientId);                
+                PushServerRpc(NetworkManager.Singleton.LocalClientId);                
             }
         }
 
