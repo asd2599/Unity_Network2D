@@ -28,12 +28,11 @@ public class Item : NetworkBehaviour
 
             if (_collider.OverlapPoint(worldMousePos))
             {
-                OnClickItemClientRpc(NetworkManager.Singleton.LocalClientId);
+                OnClickItemServerRpc(NetworkManager.Singleton.LocalClientId);
             }
         }
     }
 
-<<<<<<< HEAD
     [ServerRpc(RequireOwnership = false)]
     private void OnClickItemServerRpc(ulong clientId)
     {
@@ -43,10 +42,7 @@ public class Item : NetworkBehaviour
     }
 
 
-    [ClientRpc(RequireOwnership = false)]
-=======
     [ClientRpc]
->>>>>>> 6e64aa225dc0eb74d25c6268111ce3d6cadec7dd
     private void OnClickItemClientRpc(ulong clientId)
     {
         if(IsServer)
