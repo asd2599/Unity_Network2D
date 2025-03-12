@@ -28,19 +28,23 @@ public class Item : NetworkBehaviour
 
             if (_collider.OverlapPoint(worldMousePos))
             {
-                OnClickItemClientRpc(NetworkManager.Singleton.LocalClientId);
+                OnClickItemServerRpc(NetworkManager.Singleton.LocalClientId);
             }
         }
     }
 
-    [ClientRpc]
+    [ServerRpc(RequireOwnership = false)]
+    private void OnClickItemServerRpc(ulong clientId)
+    {
+        _networkObject.Despawn();
+
+        OnClickItemClientRpc(clientId);
+    }
+
+
+    [ClientRpc(RequireOwnership = false)]
     private void OnClickItemClientRpc(ulong clientId)
     {
-        if(IsServer)
-        {
-            _networkObject.Despawn();
-        }
-
         Cursor.OnClickItemCallback(clientId);
     }
 }
