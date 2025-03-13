@@ -38,6 +38,7 @@ public class Enemy : NetworkBehaviour
     private void Update()
     {
         if (GameManager.Instance.IsGameOver) return;
+        if (Cursor.IsStop) return;
 
         if (Input.GetMouseButtonDown(0))
         {

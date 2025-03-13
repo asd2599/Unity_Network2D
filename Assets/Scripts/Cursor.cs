@@ -7,7 +7,12 @@ public class Cursor : NetworkBehaviour
 {   
     static public OnNetworkAtion OnClickItemCallback;
 
-    private bool _isStop = false;
+    static private bool _isStop = false;
+    static public bool IsStop
+    {
+        get { return _isStop; }
+    }
+
     private ulong _clientId;
 
     private void Start()
