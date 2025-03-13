@@ -38,15 +38,15 @@ public class Item : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void OnClickItemServerRpc(ulong clientId)
     {
-        OnClickItemClientRpc(clientId);
+        OnClickItemClientRpc(clientId, Random.Range(0, 2) == 0);
 
         _networkObject.Despawn();        
     }
 
 
     [ClientRpc]
-    private void OnClickItemClientRpc(ulong clientId)
+    private void OnClickItemClientRpc(ulong clientId, bool isStop)
     {
-        Cursor.OnClickItemCallback(clientId);
+        Cursor.OnClickItemCallback(clientId, isStop);
     }
 }

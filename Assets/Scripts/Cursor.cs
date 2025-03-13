@@ -1,6 +1,7 @@
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections;
+using NUnit.Framework;
 
 public class Cursor : NetworkBehaviour
 {   
@@ -26,11 +27,19 @@ public class Cursor : NetworkBehaviour
         transform.position = Camera.main.ScreenToWorldPoint(screenPos);
     }
         
-    public void OnStopMove(ulong clientId)
+    public void OnStopMove(ulong clientId, bool isStop)
     {
-        if (clientId == _clientId) return;
-
-        StartCoroutine(StopAction());
+        if (clientId == _clientId)
+        {
+            if (isStop)
+                StartCoroutine(StopAction());
+            return;
+        }
+        else
+        {
+            if(!isStop)
+                StartCoroutine(StopAction());
+        }
     }
 
     private IEnumerator StopAction()

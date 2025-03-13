@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-public delegate void OnNetworkAtion(ulong clientId);
+public delegate void OnNetworkAtion(ulong clientId, bool isStop);
 
 public class GameManager : NetworkBehaviour
 { 
