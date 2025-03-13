@@ -28,7 +28,7 @@ public class EnemyManager : NetworkBehaviour
     
     private IEnumerator SpawnEnemy()
     {
-        while(true)
+        while(!GameManager.Instance.IsGameOver)
         {
             Vector3 pos = GetRandomPositionInView();
 
@@ -41,7 +41,7 @@ public class EnemyManager : NetworkBehaviour
 
     private IEnumerator SpawnItem()
     {
-        while (true)
+        while (!GameManager.Instance.IsGameOver)
         {
             Vector3 pos = GetRandomPositionInView();
 

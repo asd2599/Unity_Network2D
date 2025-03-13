@@ -37,7 +37,9 @@ public class Enemy : NetworkBehaviour
 
     private void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if (GameManager.Instance.IsGameOver) return;
+
+        if (Input.GetMouseButtonDown(0))
         {
             Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 

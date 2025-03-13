@@ -22,6 +22,8 @@ public class Item : NetworkBehaviour
 
     private void Update()
     {
+        if (GameManager.Instance.IsGameOver) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 worldMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -45,11 +47,6 @@ public class Item : NetworkBehaviour
     [ClientRpc]
     private void OnClickItemClientRpc(ulong clientId)
     {
-        if(IsServer)
-        {
-            _networkObject.Despawn();
-        }
-
         Cursor.OnClickItemCallback(clientId);
     }
 }
