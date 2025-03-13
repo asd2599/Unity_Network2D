@@ -121,6 +121,10 @@ public class GameManager : NetworkBehaviour
             TextMeshProUGUI text = _playerScoreTexts[count];
             text.text = "Player" + count + " : " + playerScore.Value;
             count++;
+
+            NetworkObject player = NetworkManager.Singleton.ConnectedClients[playerScore.Key].PlayerObject;
+            SpriteRenderer renderer = player.GetComponent<SpriteRenderer>();
+            text.color = renderer.material.color;
         }
     }
 
@@ -150,6 +154,11 @@ public class GameManager : NetworkBehaviour
 
         TextMeshProUGUI text = _endPanel.GetComponentInChildren<TextMeshProUGUI>();
         text.text = "Player" + clientId + " Win!";
+
+        NetworkObject obj = NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject;
+        SpriteRenderer renderer = obj.GetComponent<SpriteRenderer>();
+
+        text.color = renderer.material.color;
 
         _isGameOver = true;
     }
