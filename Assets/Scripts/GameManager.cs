@@ -7,9 +7,7 @@ using System.Collections.Generic;
 public delegate void OnNetworkAtion(ulong clientId);
 
 public class GameManager : NetworkBehaviour
-{
-    
-
+{ 
     static public GameManager Instance;
 
     [SerializeField]
@@ -25,6 +23,11 @@ public class GameManager : NetworkBehaviour
 
     private bool _isConnectLocked = false;
     private int _playerNum = 0;
+    private bool _isGameOver = false;
+    public bool IsGameOver
+    {
+        get { return _isGameOver; }
+    }
 
     private Dictionary<ulong, int> _playerScores = new Dictionary<ulong, int>();
     private List<TextMeshProUGUI> _playerScoreTexts = new List<TextMeshProUGUI>();
@@ -147,5 +150,7 @@ public class GameManager : NetworkBehaviour
 
         TextMeshProUGUI text = _endPanel.GetComponentInChildren<TextMeshProUGUI>();
         text.text = "Player" + clientId + " Win!";
+
+        _isGameOver = true;
     }
 }
