@@ -180,7 +180,7 @@ MonoBehaviour:
   _startBtn: {fileID: 413474685}
   _errorPanel: {fileID: 1262567180}
   _scorePanel: {fileID: 802061039}
-  _endPanel: {fileID: 1217922153}
+  _endPanel: {fileID: 1217922152}
 --- !u!4 &151375611
 Transform:
   m_ObjectHideFlags: 0
